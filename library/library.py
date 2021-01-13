@@ -1,7 +1,7 @@
 # ライブラリ系
 import math
 import string
-from itertools import permutations, accumulate
+from itertools import permutations, accumulate, combinations_with_replacement
 import operator
 from collections import defaultdict, Counter, deque
 from functools import reduce
