@@ -1,7 +1,8 @@
 # ライブラリ系
 import math
 import string
-from itertools import permutations, accumulate, combinations_with_replacement
+import copy
+from itertools import permutations, combinations, accumulate, combinations_with_replacement
 import operator
 from collections import defaultdict, Counter, deque
 from functools import reduce
@@ -36,11 +37,16 @@ def binary_search(num, l):
             flag, index = True, middle
             break
         elif last == first:
-            if l[middle] < num: index = middle+1
-            else: index = middle
+            if l[middle] < num: index = middle
+            else: index = middle-1
             break
         elif num > l[middle]: first = min(last, middle + 1)
         elif num < l[middle]: last = max(first, middle - 1)
+    while index > 0 and len(l) > 2:
+        if l[index-1] == l[index]:
+            index -= 1
+        else:
+            break
     return flag, index
 
 # 最大公約数
