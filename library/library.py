@@ -1,6 +1,7 @@
 # ライブラリ系
 import math
 import string
+import bisect
 import copy
 from itertools import permutations, combinations, accumulate, combinations_with_replacement
 import operator
