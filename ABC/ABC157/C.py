@@ -1,13 +1,22 @@
+from collections import defaultdict
 
 N, M = map(int, input().split())
-S, C = [], []
+d = defaultdict(list)
 for _ in range(M):
     s, c = map(int, input().split())
-    S.append(s)
-    C.append(c)
+    d[s].append(c)
 
 res = -1
-for i in range(10**N):
-    num = str(i)
-    if len(num) != N:
-        break
+if len(set(d[1])) > 1 or len(set(d[2])) > 1 or len(set(d[3])) > 1:
+    pass
+elif d[1] == [0]:
+    pass
+else:
+    res = ""
+    for i in range(1, N+1):
+        if d[i] != []:
+            res += str(d[i][0])
+        else:
+            res += "0"
+    res = int(res)
+print(res)

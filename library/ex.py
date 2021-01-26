@@ -1,36 +1,38 @@
-def binary_search(num, l):
-    """
-    :param num: 探したい値
-    :param l: リスト(ソート済み)
-    :return: あるかないか(True,False)，index番号(ない場合はそのindexからnumを超える)
-    """
-    flag, index = False, 0
-    first, last = 0, len(l)-1
-    while True:
-        middle = (last + first) // 2
-        if num == l[middle]:
-            flag, index = True, middle
-            break
-        elif last == first:
-            if l[middle] < num: index = middle
-            else: index = middle-1
-            break
-        elif num > l[middle]: first = min(last, middle + 1)
-        elif num < l[middle]: last = max(first, middle - 1)
-    return flag, index
-D = int(input())
-N = int(input())
-M = int(input())
-Di = [0, D]
-for _ in range(N-1):
-    Di.append(int(input()))
-Ki = []
-for _ in range(M):
-    Ki.append(int(input()))
-Di.sort()
-res = 0
-for k in Ki:
-    flag, index = binary_search(k, Di)
-    if flag == False:
-        res += min(abs(Di[index+1]-k), abs(k-Di[index]))
+from collections import defaultdict
+
+def dfs(i, l, s, res):
+    if l != []:
+        print(l, res)
+        now_num = l[-1]
+        del l[-1]
+        if now_num not in s:
+            s.add(now_num)
+            l += d[now_num]
+            res[now_num].append(i)
+            i += 1
+            index = dfs(i, l, s, res)
+            res[now_num].append(index)
+            i += 1
+            return i
+        else:
+            return i
+    else:
+        return i
+
+U = int(input())
+d = defaultdict(list)
+for _ in range(U):
+    k_v = list(map(int, input().split()))
+    if k_v[1] == 0:
+        continue
+    else:
+        for e in k_v[2:]:
+            d[k_v[0]].append(e)
+
+print(d)
+l = [1]
+s = set()
+i = 1
+res = defaultdict(list)
+dfs(i, l, s, res)
 print(res)
