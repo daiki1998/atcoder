@@ -1,38 +1,26 @@
-from collections import defaultdict
+M = int(input())
+N = int(input())
+A = [list(map(int, input().split())) for _ in range(N)]
 
-def dfs(i, l, s, res):
-    if l != []:
-        print(l, res)
-        now_num = l[-1]
-        del l[-1]
-        if now_num not in s:
-            s.add(now_num)
-            l += d[now_num]
-            res[now_num].append(i)
-            i += 1
-            index = dfs(i, l, s, res)
-            res[now_num].append(index)
-            i += 1
-            return i
+def dfs(n, m, cnt, visit):
+    global res
+    now_pos = [n, m]
+    visit[n][m] = True
+    now_cnt = cnt
+    for action in [[-1, 0], [1, 0], [0, -1], [0, 1]]:
+        next_pos = [now_pos[0]+action[0], now_pos[1]+action[1]]
+        if 0 <= next_pos[0] < N and 0 <= next_pos[1] < M and A[next_pos[0]][next_pos[1]] == 1 and visit[next_pos[0]][next_pos[1]] == False:
+            now_cnt += 1
+            dfs(next_pos[0], next_pos[1], now_cnt, visit)
+            now_cnt = cnt
         else:
-            return i
-    else:
-        return i
+            res = max(now_cnt, res)
+    visit[n][m] = False
 
-U = int(input())
-d = defaultdict(list)
-for _ in range(U):
-    k_v = list(map(int, input().split()))
-    if k_v[1] == 0:
-        continue
-    else:
-        for e in k_v[2:]:
-            d[k_v[0]].append(e)
-
-print(d)
-l = [1]
-s = set()
-i = 1
-res = defaultdict(list)
-dfs(i, l, s, res)
+res = 0
+for n in range(N):
+    for m in range(M):
+        if A[n][m] == 1:
+            cnt, visit = 1, [[False for _ in range(M)] for _ in range(N)]
+            dfs(n, m, cnt, visit)
 print(res)
