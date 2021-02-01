@@ -1,26 +1,25 @@
-M = int(input())
+from collections import defaultdict, deque
+
 N = int(input())
-A = [list(map(int, input().split())) for _ in range(N)]
+graph = defaultdict(list)
+for i in range(N):
+    k_v = list(map(int, input().split()))
+    if k_v[1] != 0:
+        for e in k_v[2:]:
+            graph[k_v[0]].append(e)
+res = {1: 0}
+for i in range(2, N+1):
+    res[i] = -1
+s = set()
+s.add(1)
+node = deque([1])
+while len(node) > 0:
+    now = node.popleft()
+    for n in graph[now]:
+        if n not in s:
+            node.append(n)
+            s.add(n)
+            res[n] = res[now] + 1
 
-def dfs(n, m, cnt, visit):
-    global res
-    now_pos = [n, m]
-    visit[n][m] = True
-    now_cnt = cnt
-    for action in [[-1, 0], [1, 0], [0, -1], [0, 1]]:
-        next_pos = [now_pos[0]+action[0], now_pos[1]+action[1]]
-        if 0 <= next_pos[0] < N and 0 <= next_pos[1] < M and A[next_pos[0]][next_pos[1]] == 1 and visit[next_pos[0]][next_pos[1]] == False:
-            now_cnt += 1
-            dfs(next_pos[0], next_pos[1], now_cnt, visit)
-            now_cnt = cnt
-        else:
-            res = max(now_cnt, res)
-    visit[n][m] = False
-
-res = 0
-for n in range(N):
-    for m in range(M):
-        if A[n][m] == 1:
-            cnt, visit = 1, [[False for _ in range(M)] for _ in range(N)]
-            dfs(n, m, cnt, visit)
-print(res)
+for i in range(1, N+1):
+    print(i, res[i])
