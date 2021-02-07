@@ -14,32 +14,47 @@ now = [C[0]]
 del C[0]
 flag = True
 while flag:
-    l = C
-    can_next = AB[now[-1]]
+    back = copy.deepcopy(C)
+    forward = AB[now[-1]]
     while True:
-        next_set = set(l) & set(can_next)
-        if next_set:
-            next_num = list(next_set)[0]
-            now.append(next_num)
+        can_go = set(back) & set(forward)
+        if can_go:
+            if can_go & set(C):
+                next_num = list(can_go & set(C))[0]
+                now.append(next_num)
+            else:
+                while True:
+                    res += 1
+                    now.append("A")
+                    can_go_go = copy.deepcopy(list(can_go))
+                    for n in can_go:
+                        can_go_go += AB[n]
+                    if set(can_go_go) & set(C):
+                        next_num = list(set(can_go_go) & set(C))[0]
+                        now.append(next_num)
+                        break
             C = set(C)
             C.remove(next_num)
             C = list(C)
             res += 1
             break
         else:
-            next_l = copy.deepcopy(can_next)
-            for n in can_next:
-                next_l += AB[n]
+            now.append("A")
+            next_forward = copy.deepcopy(forward)
+            next_back = copy.deepcopy(back)
+            for n in forward:
+                next_forward += AB[n]
+            for n in back:
+                next_back += AB[n]
             res += 1
-        if set(can_next) == set(next_l):
+        if set(next_forward) == set(forward) and set(next_back) == set(back):
             flag = False
             break
         else:
-            can_next = list(set(next_l))
-
+            forward = list(set(next_forward))
+            back = list(set(next_back))
     if C == []:
         break
-
 if flag:
     print(res)
 else:
