@@ -90,6 +90,16 @@ def num_C_num(n_1, n_2):
         shita *= n_2-i
     return ue // shita
 
+# modを使用するaCbを算出
+def num_C_num(n_1, n_2, mod):
+    X, Y = 1, 1
+    for i in range(n_2):
+        Y *= (i+1)
+        Y %= mod
+        X *= (n_1-i)
+        X %= mod
+    return (X * pow(Y, mod-2, mod)) % mod
+
 # 約数をリストで返す
 def divisor(N):
     i = 1
